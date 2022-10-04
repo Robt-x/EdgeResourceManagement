@@ -19,20 +19,17 @@ class ServerMsgProcessor:
         pkg = json.loads(pkg)
         cmd = pkg['CMD']
         data = pkg['Data']
-        resp = {
-            'CMD': "",
-            'State': None,
-            'Content': None
-        }
+        # resp = {
+        #     'CMD': "",
+        #     'State': None,
+        #     'Content': None
+        # }
         if cmd == "regis":
             resp = fm.register_module(data)
         elif cmd == "delete":
-            res = self.dbo.db_one_node_data_delete(cf.sql_delete_one_node_data, data)
-            resp['CMD'] = "delete"
-            resp['State'] = "End"
-            resp['Content'] = res
+            resp = fm.register_module(data, regis=False)
         elif cmd == "task":
-            pass
+            resp = fm.task_schedule_module(data)
         elif cmd == "select":
             resp = fm.re_view_module(data)
         else:

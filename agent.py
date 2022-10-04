@@ -1,5 +1,4 @@
 import random
-
 from AgentClass import Agent
 import json
 from tools import *

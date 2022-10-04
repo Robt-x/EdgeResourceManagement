@@ -121,7 +121,6 @@ class Agent:
                 'cal_amount': cal_amount,
                 'pkg_size': pkg_size,
                 'pkg_amount': pkg_amount
-
             }
         }
         pkg = json.dumps(pkg)
