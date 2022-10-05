@@ -39,9 +39,9 @@ def task_schedule_module(data):
     cal = data['cal_amount']
     p_size = data['pkg_size']
     p_amount = data['pkg_amount']
-    calf = 0
+    calf = cal * 2**-3 / (delay * 10e3)  # P(Ghz or click per sec) = cal(GB)* 2**-3 / (Delay(ms) * 10e3)
     memory = 0
-    bandw = rate
+    bandwidth = rate  # rate < bandwidth
     pass
 
 
