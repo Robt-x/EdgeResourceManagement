@@ -23,29 +23,57 @@ def register_module(data, regis=True):
         resp['CMD'] = "regis"
         resp['State'] = "End"
         resp['Content'] = res
-        return resp
+
     else:
         res = dbo.db_one_node_data_delete(cf.sql_delete_one_node_data, data)
         resp['CMD'] = "delete"
         resp['State'] = "End"
         resp['Content'] = res
-        return resp
+    dbo.DBDisConnect()
+    return resp
 
 
 def task_schedule_module(data):
+    resp_clear()
+    dbo.DBConnect()
+    task_id = data['id']
     delay = data['delay']
     jit = data['jitter']
     rate = data['rate']
-    cal = data['cal_amount']
-    p_size = data['pkg_size']
-    p_amount = data['pkg_amount']
-    calf = cal * 2**-3 / (delay * 10e3)  # P(Ghz or Gclick per sec) >= cal(GB) / (Delay(s) * 8)
-    memory = p_size * p_amount  # memory >= p_size * p_amount
-    bandwidth = rate  # bandwidth>= rate
+    package = data['package']  # 2**5～2**6 * 1/1024 GB
+    calf = [cf_req(delay, p) for p in package]
+    memory = [p / 512 for p in package]  # memory >= package[i]
+    bandwidth = rate  # bandwidth >= rate
+    task_tp = []
+    for c, m in zip(calf, memory):
+        task_tp.append([c, m, bandwidth])
+    node_list = dbo.db_limit_node_data_select(cf.sql_select_limit_node_data, limit=5, offset=0)
+    for (token, c, m, b) in node_list:
+        for pk in task_tp:
+            isOK, res = match(pk, [c, m, b])
+            if isOK:
+                pass
+    dbo.DBDisConnect()
+    return resp
+
+
+def cf_req(delay, p_size):
+    return p_size * 10e3 / (delay * 1024)  # P(Ghz or Gclick per sec) >= p_size(GB) / (Delay(s) * 8)
+
+
+def match(t, n):
+    res = []
+    for e1, e2 in zip(t, n):
+        e = e2 - e1
+        if e < 0:
+            return False, None
+        res.append(e)
+    return True, res
 
 
 def re_view_module(data):
     resp_clear()
+    dbo.DBConnect()
     if data['type'] == "all":
         f = dbo.db_user_confirm(data['user'], data['pwd'])
         if f is False:
@@ -62,4 +90,5 @@ def re_view_module(data):
         resp['CMD'] = "select"
         resp['State'] = "End"
         resp['Content'] = res
+    dbo.DBDisConnect()
     return resp

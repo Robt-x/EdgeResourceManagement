@@ -7,11 +7,13 @@ ID = str(uuid.uuid1())
 
 uuid = str(uuid.uuid1())
 a = Agent(uuid, 'hhhhh', '123456')
-a.dataFilling(force=random.randint(5, 10), memory=random.randint(10, 20), bandwitch=random.randint(10, 30))
+a.dataFilling(force=random.randint(5, 10), memory=random.randint(1, 4), bandwitch=random.randint(10, 30))
 a.register()
-res = a.resourceFetch()
-for i in res:
-    print(i)
+# res = a.resourceFetch()
+# for i in res:
+#     print(i)
 # a.data()
 # res = a.unregister()
 # print(res)
+
+a.task_submit('0', 10, 10, 10)

@@ -19,11 +19,6 @@ class ServerMsgProcessor:
         pkg = json.loads(pkg)
         cmd = pkg['CMD']
         data = pkg['Data']
-        # resp = {
-        #     'CMD': "",
-        #     'State': None,
-        #     'Content': None
-        # }
         if cmd == "regis":
             resp = fm.register_module(data)
         elif cmd == "delete":

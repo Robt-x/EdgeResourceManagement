@@ -79,11 +79,29 @@ class DataBaseOperator:
         except Exception:
             print("Failed")
 
-    def db_one_node_data_updata(self, sql, token, data):
+    def db_limit_node_data_select(self, sql, limit, offset=0):
         c = self.__conn.cursor()
         # noinspection PyBroadException
         try:
-            res = c.execute(sql, [token, data[0], data[1], data[2], data[3]])
+            res = c.execute(sql, [limit, offset])
+            return res.fetchall()
+        except Exception:
+            print("Failed")
+
+    def db_one_node_data_update(self, sql, token, data):
+        c = self.__conn.cursor()
+        # noinspection PyBroadException
+        try:
+            res = c.execute(sql, [token, data[0], data[1], data[2]])
+            return list(res.fetchall())
+        except Exception:
+            print("Failed")
+
+    def db_task_resource_allocated(self, sql, task_id, token, data):
+        c = self.__conn.cursor()
+        # noinspection PyBroadException
+        try:
+            res = c.execute(sql, [task_id, token, data[0], data[1], data[2]])
             return list(res.fetchall())
         except Exception:
             print("Failed")
@@ -97,14 +115,6 @@ class DataBaseOperator:
             return password == pwd
         except Exception:
             print("Failed")
-
-    def re_allocation(self):
-        resource_node = {
-            'node': [],
-            'resource': []
-        }
-
-        pass
 
     def re_release(self):
         pass

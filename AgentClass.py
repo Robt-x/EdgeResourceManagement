@@ -103,24 +103,23 @@ class Agent:
         asyncio.run(self.__communicate(pkg))
         return self.__res
 
-    def task_submit(self, name, delay, jit, rate):
-        cal_amount = random.randint(1, 10)
-        pkg_amount = random.randint(1, 3) * 10
-        pkg_size = cal_amount / pkg_amount
+    def task_submit(self, id, delay, jit, rate):
+        count = random.randint(4, 8)
+        package = []
+        for i in range(count):
+            package.append(random.randint(4, 8))
         # 计算量
         # 数据包大小
         # 数据包数量
         # 能耗计算公式
         pkg = {
-            'CMD': cf.select,
+            'CMD': cf.task,
             'Data': {
-                'name': name,
+                'id': id,
                 'delay': delay,
                 'jitter': jit,
                 'rate': rate,
-                'cal_amount': cal_amount,
-                'pkg_size': pkg_size,
-                'pkg_amount': pkg_amount
+                'package': package,
             }
         }
         pkg = json.dumps(pkg)
