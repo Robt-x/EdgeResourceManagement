@@ -30,9 +30,11 @@ sql_insert_one_node_data = "INSERT INTO NODE_RESOURCE VALUES (?, ?, ?, ?)"
 sql_delete_one_node_data = "DELETE FROM NODE_RESOURCE where Node_token=?;"
 sql_select_one_node_data = "SELECT * FROM NODE_RESOURCE where Node_token=?;"
 sql_select_all_node_data = "SELECT * FROM NODE_RESOURCE;"
-sql_update_one_node_data = "UPDATE NODE_RESOURCE SET CalculateForce = ?, Memory = ?, Bandwidth=? WHERE Node_token=?; "
+sql_update_node_data = "UPDATE NODE_RESOURCE SET CalculateForce = ?, Memory = ?, Bandwidth=? WHERE Node_token=?; "
 sql_insert_task_data = "INSERT INTO TASK_ALLOCATION VALUES(?, ?, ?, ?, ?)"
 sql_select_limit_node_data = "SELECT * FROM NODE_RESOURCE Order BY Memory DESC, CalculateForce DESC, Bandwidth DESC LIMIT ? OFFSET ?;"
+sql_select_task_data = "SELECT * FROM TASK_ALLOCATION WHERE Task_id=? AND Node_token = ?"
+sql_update_task_data = "UPDATE TASK_ALLOCATION SET CalculateForce = ?, Memory = ?, Bandwidth=? WHERE Task_id=? AND Node_token = ?;"
 # server & agent
 socket_address = 'ws://localhost:8765'
 socket_domain = 'localhost'

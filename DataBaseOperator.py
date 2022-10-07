@@ -86,25 +86,22 @@ class DataBaseOperator:
             res = c.execute(sql, [limit, offset])
             return res.fetchall()
         except Exception:
-            print("Failed")
+            print("Limit Fetch Failed")
 
-    def db_one_node_data_update(self, sql, token, data):
+    def db_task_resource_allocation(self, task_id, token, res, pk):
         c = self.__conn.cursor()
         # noinspection PyBroadException
         try:
-            res = c.execute(sql, [token, data[0], data[1], data[2]])
-            return list(res.fetchall())
+            rc = c.execute(cf.sql_select_task_data, [task_id, token]).fetchone()
+            c.execute(cf.sql_update_node_data, [res[0], res[1], res[2], token])
+            if rc is None:
+                c.execute(cf.sql_insert_task_data, [task_id, token, pk[0], pk[1], pk[2]])
+            else:
+                c.execute(cf.sql_update_task_data, [pk[0]+rc[2], pk[1]+rc[3], pk[2]+rc[4], task_id, token])
+            self.__conn.commit()
+            return "Success"
         except Exception:
-            print("Failed")
-
-    def db_task_resource_allocated(self, sql, task_id, token, data):
-        c = self.__conn.cursor()
-        # noinspection PyBroadException
-        try:
-            res = c.execute(sql, [task_id, token, data[0], data[1], data[2]])
-            return list(res.fetchall())
-        except Exception:
-            print("Failed")
+            print(" Allocation Failed")
 
     def db_user_confirm(self, name, pwd):
         c = self.__conn.cursor()

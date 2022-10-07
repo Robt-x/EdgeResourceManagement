@@ -47,12 +47,14 @@ def task_schedule_module(data):
     task_tp = []
     for c, m in zip(calf, memory):
         task_tp.append([c, m, bandwidth])
-    node_list = dbo.db_limit_node_data_select(cf.sql_select_limit_node_data, limit=5, offset=0)
-    for (token, c, m, b) in node_list:
-        for pk in task_tp:
-            isOK, res = match(pk, [c, m, b])
-            if isOK:
-                pass
+    while len(task_tp) > 0:
+        node_list = dbo.db_limit_node_data_select(cf.sql_select_limit_node_data, limit=5, offset=0)
+        for (token, c, m, b) in node_list:
+            for pk in task_tp:
+                isOK, res = match(pk, [c, m, b])
+                if isOK:
+                    dbo.db_task_resource_allocation(task_id=task_id, token=token, res=res, pk=pk)
+                    task_tp.remove(pk)
     dbo.DBDisConnect()
     return resp
 

@@ -104,7 +104,7 @@ class Agent:
         return self.__res
 
     def task_submit(self, id, delay, jit, rate):
-        count = random.randint(4, 8)
+        count = random.randint(3, 5)
         package = []
         for i in range(count):
             package.append(random.randint(4, 8))
